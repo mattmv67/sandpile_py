@@ -5,10 +5,12 @@ class Cell():
         self.value = value
         self.max_cap = max_cap
         self.buffer = 0
-
+        self.critical = value > max_cap
         self.h = h
         self.w = w
-        self.neighbors = []it bash
+        self.neighbors = []
+
+        # self.team = None
 
     def __eq__(self, other):
         return self.h == other.h and self.w == other.w
@@ -19,6 +21,9 @@ class Cell():
 
     def is_stable(self):
         return self.value < self.max_cap
+
+    def add_buffer(self, val):
+        self.buffer += val
 
     def stack(self):
         self.buffer += 1
@@ -43,3 +48,15 @@ class Cell():
 
     def get_neighbors(self):
         return self.neighbors
+
+    def set_critical(self, boo):
+        self.critical = boo
+
+    def get_critical(self, boo):
+        return self.critical
+    #
+    # def get_team(self):
+    #     return self.team
+    #
+    # def set_team(self, team):
+    #     self.team = team
