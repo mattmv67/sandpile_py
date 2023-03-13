@@ -1,4 +1,4 @@
-From Grid import Grid
+from Grid import Grid
 
 class Sandpile:
 

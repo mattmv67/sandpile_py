@@ -8,7 +8,7 @@ class Cell():
         self.critical = value > max_cap
         self.h = h
         self.w = w
-        self.neighbors = []
+        self.neighbors =  {}
 
         # self.team = None
 
@@ -22,8 +22,8 @@ class Cell():
     def is_stable(self):
         return self.value < self.max_cap
 
-    def add_buffer(self, val):
-        self.buffer += val
+    def add_buffer(self, val, is_crit):
+        self.buffer += val if not is_crit else val*2
 
     def stack(self):
         self.buffer += 1
@@ -52,7 +52,7 @@ class Cell():
     def set_critical(self, boo):
         self.critical = boo
 
-    def get_critical(self, boo):
+    def get_critical(self):
         return self.critical
     #
     # def get_team(self):
