@@ -28,7 +28,13 @@ class HumanPlayer:
                     row_str += f"{board_data[h][w].get_value():^3}|"
                 print(row_str)
 
-            p_h = int(input(f"You have '{points}' points to spend. Please select the row to add value to: "))
+            p_h = None
+            while True:
+                try:
+                    p_h = int(input(f"You have '{points}' points to spend. Please select the row to add value to: "))
+                    break
+                except:
+                    print("invalid input")
 
             p_row = board_data[p_h]
 
@@ -43,9 +49,22 @@ class HumanPlayer:
             
             print("\n\n" + row_str)
 
-            p_w = int(input(f"You have '{points}' points to spend. Please select the cell to add value to: "))
+            p_w = None
+            while True:
+                try:
+                    p_w = int(input(f"You have '{points}' points to spend. Please select the cell to add value to: "))
+                    break
+                except:
+                    print("invalid input")
 
-            val = int(input(f"You have '{points}' points to spend. How many points to add to this cell: "))
+
+            val = None
+            while True:
+                try:
+                    val = int(input(f"You have '{points}' points to spend. Please select the cell to add value to: "))
+                    break
+                except:
+                    print("invalid input")
 
             points -= val
 

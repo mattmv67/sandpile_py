@@ -94,10 +94,6 @@ class GameBoard(Grid):
                 c = self.grid[h][w]
                 c_value = c.get_value()
 
-                if abs(c_value) > 3:
-                    print(f"{p_team} found unstable cell with value: {c_value}")
-
-
                 if abs(c_value) > 3 and c_value * p_team > 0 :
                     print(f"Found unstable call with value: {c_value} for team {p_team}")
                     # if c is unstable and friendly cell
