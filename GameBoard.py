@@ -1,4 +1,6 @@
 from Sandpile import Sandpile
+from GridRenderer import GridRenderer
+from MP4VideoWriter import MP4VideoWriter
 from Grid import Grid
 import json
 
@@ -15,13 +17,15 @@ class GameBoard(Grid):
 
         self.bonus_dict = {}
 
+        self.video_writer = MP4VideoWriter("game.mp4", 20)
+
         # Sets up cell grid and cell associations.
         super(GameBoard, self).__init__(self.config['BoardHeight'], self.config['BoardWidth'])
 
     def play(self):
 
         round_bonus = 16
-        num_bonuses = 2
+        num_bonuses = 50
 
         self.bonus_dict = {
             self.player_1.name: 0,
@@ -41,8 +45,9 @@ class GameBoard(Grid):
         self.tick += 1
 
         while self.in_progress():
+            print("Tick: " + str(self.tick))
             for player in [self.player_1, self.player_2]:
-                move = player.play(self.grid, (round_bonus if self.tick < num_bonuses else 0) + bonus_dict[player.name])
+                move = player.play(self.grid, (round_bonus if self.tick < num_bonuses else 0) + self.bonus_dict[player.name]//16)
                 p_team = player.get_team()
                 self.add_to_values(move,p_team)
                 marked_cells = self.mark_unstable_enemies(p_team)
@@ -51,6 +56,11 @@ class GameBoard(Grid):
                 self.unmark_cells(marked_cells)
                 self.convert()
             self.tick += 1
+            image = GridRenderer(self.export()).create_image()
+            self.video_writer.add_frame(image)
+
+        self.video_writer.export_video();
+
 
 
     def in_progress(self):
@@ -58,7 +68,6 @@ class GameBoard(Grid):
             for w in range(self.width):
                 if self.grid[h][w].get_value() > 3 and not (self.bonus_dict[self.player_1.name] == 0 and self.bonus_dict[self.player_2.name] == 0):
                     return True
-
         return False
 
 
@@ -87,15 +96,12 @@ class GameBoard(Grid):
 
         bonus = 0
 
-        print(f"team : {p_team} has placed their values, shattering team {p_team}'s cells")
-
         for h in range(self.height):
             for w in range(self.width):
                 c = self.grid[h][w]
                 c_value = c.get_value()
 
                 if abs(c_value) > 3 and c_value * p_team > 0 :
-                    print(f"Found unstable call with value: {c_value} for team {p_team}")
                     # if c is unstable and friendly cell
                     bonus += 1
                     ns = c.get_neighbors()
@@ -136,38 +142,6 @@ class GameBoard(Grid):
     def unmark_cells(self, cells):
         for c in cells:
             c.set_critical(False)
-
-
-
-    # # def iterate_game(self, team):
-    # #     found_unstable = False
-    # #     self.tick += 1
-    # #     for c in self.active_cells.copy(): #TODO investigate copy???
-    # #         if not c.is_stable():
-    # #             found_unstable = True
-    # #             neighbors = c.get_neighbors()
-
-    # #             c_team = c.get_team()
-
-    # #             for n in neighbors:
-    # #                 n_team = n.get_team()
-
-    # #                 if n_team == c_team * -1: #enemy team
-    # #                     if n.is_unstable
-    # #                 else:
-    # #                     n.set_team(c_team)
-
-    #         if c.shatter():
-    #             neighbors = c.get_neighbors()
-    #             for n in neighbors:
-    #                 self.active_cells.add(n)
-    #             found_unstable = True
-    #     if found_unstable:
-    #         for c in self.active_cells:
-    #             c.convert()
-
-    #     return found_unstable
-
 
     def export_game_data(self):
         team_value_pairs = []

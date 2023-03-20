@@ -1,4 +1,4 @@
 {
-    "BoardHeight": 10,
-    "BoardWidth": 10
+    "BoardHeight": 128,
+    "BoardWidth": 64
 } 
