@@ -93,11 +93,16 @@ class Grid():
 
     def export(self):
         ret = []
+        board_total = 0
         for h in range(self.height):
             row = []
             for w in range(self.width):
-                row.append(self.grid[h][w].get_value())
+                val = self.grid[h][w].get_value()
+                board_total += val
+                row.append(val)
             ret.append(row)
+
+        print("Board total: " + str(board_total))
 
         return ret
 

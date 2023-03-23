@@ -17,7 +17,7 @@ class GameBoard(Grid):
 
         self.bonus_dict = {}
 
-        self.video_writer = MP4VideoWriter("game.mp4", 20)
+        # self.video_writer = MP4VideoWriter("game", 60)
 
         # Sets up cell grid and cell associations.
         super(GameBoard, self).__init__(self.config['BoardHeight'], self.config['BoardWidth'])
@@ -25,7 +25,7 @@ class GameBoard(Grid):
     def play(self):
 
         round_bonus = 16
-        num_bonuses = 50
+        num_bonuses = 250
 
         self.bonus_dict = {
             self.player_1.name: 0,
@@ -47,7 +47,7 @@ class GameBoard(Grid):
         while self.in_progress():
             print("Tick: " + str(self.tick))
             for player in [self.player_1, self.player_2]:
-                move = player.play(self.grid, (round_bonus if self.tick < num_bonuses else 0) + self.bonus_dict[player.name]//16)
+                move = player.play(self.grid, (round_bonus if self.tick < num_bonuses else 0) + self.bonus_dict[player.name]//256)
                 p_team = player.get_team()
                 self.add_to_values(move,p_team)
                 marked_cells = self.mark_unstable_enemies(p_team)
@@ -57,9 +57,9 @@ class GameBoard(Grid):
                 self.convert()
             self.tick += 1
             image = GridRenderer(self.export()).create_image()
-            self.video_writer.add_frame(image)
+            # self.video_writer.add_frame(image, self.tick)
 
-        self.video_writer.export_video();
+        # self.video_writer.export_video(self.tick);
 
 
 
