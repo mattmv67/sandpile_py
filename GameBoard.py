@@ -6,7 +6,7 @@ import json
 
 class GameBoard(Grid):
 
-    def __init__(self, player_1, player_2, config_file='game_config.json' ):
+    def __init__(self, player_1, player_2, config_file='game_config.json', frame_queue=None):
 
         self.config = None
         with open(config_file) as json_file:
@@ -14,6 +14,8 @@ class GameBoard(Grid):
 
         self.player_1 = player_1
         self.player_2 = player_2
+
+        self.frame_queue = frame_queue
 
         self.bonus_dict = {}
 
@@ -56,8 +58,10 @@ class GameBoard(Grid):
                 self.unmark_cells(marked_cells)
                 self.convert()
             self.tick += 1
+
+            
             image = GridRenderer(self.export()).create_image()
-            # self.video_writer.add_frame(image, self.tick)
+            self.frame_queue.put(image)
 
         # self.video_writer.export_video(self.tick);
 

@@ -25,7 +25,7 @@ class RandomFirstRowPlayer:
             move.append(((self.row_index, ran_w), to_spend))
 
             points -= to_spend
-        print(self.name + " returning move; " +  str(move))
+        # print(self.name + " returning move; " +  str(move))
 
         return move
         

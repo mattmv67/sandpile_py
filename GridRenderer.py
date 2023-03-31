@@ -2,33 +2,56 @@ from PIL import Image
 import random
 import time
 
+from SingleGameContainer64x128 import SingleGameContainer64x128
+
+
 
 class GridRenderer:
-    # Define the colors for each number
-    COLOR_MAP = {
-        0: (0, 0, 0),   # Black
-        1: (66, 221, 245),
-        2: (66, 120, 245),
-        3: (129, 66, 245),
-        -1: (230, 245, 66),
-        -2: (245, 158, 66),
-        -3: (245, 66, 66)
-    }
 
-    # Define the color for the background
-    BACKGROUND_COLOR = (0, 255, 0) # Yellow
-
-    def __init__(self, *grids):
+    def __init__(self, *grids, color_map=None):
         self.grids = grids
-        self.width = len(self.grids[0][0])
-        self.height = len(self.grids[0])
-        self.grid_distance = 100
-        self.grid_width = (1920 - 4 * self.grid_distance) // 3
-        self.image_width = 1920
-        self.image_height = 1080
-        self.image = Image.new('RGB', (self.image_width, self.image_height), self.BACKGROUND_COLOR)
+
+        self.color_map = {
+            0: (0, 0, 0),   # Black
+            1: (245, 221, 66),
+            2: (245, 120, 66),
+            3: (245, 66, 66),
+            -1: (66, 245, 245),
+            -2: (66, 158, 245),
+            -3: (66, 66, 245),
+            "POS_UNSTABLE": (245, 0, 66),
+            "NEG_UNSTABLE": (66, 0, 245),
+            "BACKGROUND_COLOR": (81, 137, 14)
+        }
+
+        if self.color_map is None:
+            self.color_map = COLOR_MAP
+
+                
+
+        
+        
+        
+        # ==Chat GPT side quest==
+        # self.width = len(self.grids[0][0])
+        # self.height = len(self.grids[0])
+        # self.grid_distance = 100
+        # self.grid_width = (1920 - 4 * self.grid_distance) // 3
+        # self.image_width = 1920
+        # self.image_height = 1080
+        # self.image = Image.new('RGB', (self.image_width, self.image_height), self.BACKGROUND_COLOR)
 
     def create_image(self):
+        
+        g_len = len(self.grids)
+        bgrs = []
+        if g_len == 1:
+            bgrs = SingleGameContainer64x128(self.grids[0], self.color_map).capture()
+        
+        return bgrs
+        
+        
+        ''' === Chat GPT Side quest ===
         # Determine the scale factor to fit the image into the available space
         num_grids = len(self.grids)
         total_grid_width = 3 * self.grid_width + 2 * self.grid_distance
@@ -45,7 +68,7 @@ class GridRenderer:
             y_pos = int((self.image_height - 2 * self.grid_distance) // 2 + i // 3 * (self.height + self.grid_distance) + (self.height - scale_factor * self.height) / 2)
             self.image.paste(grid_image.resize((int(scale_factor * self.width), int(scale_factor * self.height))), (x_pos, y_pos))
 
-        return self.image
+        return self.image'''
 
 
 
